@@ -13,7 +13,6 @@ import (
 // 微信注册校验
 func WxRegistry(r *ghttp.Request) {
 	var (
-		lst       []string
 		temp      string
 		result    []byte
 		resStr    string
@@ -23,14 +22,13 @@ func WxRegistry(r *ghttp.Request) {
 		nonce     = r.GetString("nonce")
 		echoStr   = r.GetString("echostr")
 		h         = sha1.New()
+		lst       = []string{timeStamp, nonce, token}
 	)
 
 	log.Println("sign: ", sign)
 	log.Println("timestamp: ", timeStamp)
 	log.Println("nonce: ", nonce)
 	log.Println("echo: ", echoStr)
-
-	lst = append(lst, token, timeStamp, nonce)
 
 	// 1. 字典序排序
 	sort.Strings(lst)
