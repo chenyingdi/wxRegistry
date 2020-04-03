@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"sort"
+	"unsafe"
 )
 
 // 微信注册校验
@@ -15,7 +16,7 @@ func WxRegistry(r *ghttp.Request) {
 		lst       []string
 		temp      string
 		result    []byte
-		resStr    string
+		resStr    *string
 		sign      = r.GetString("signature")
 		timeStamp = r.GetString("timestamp")
 		nonce     = r.GetString("nonce")
@@ -38,15 +39,18 @@ func WxRegistry(r *ghttp.Request) {
 		temp += s
 	}
 
+	log.Println("temp: ", temp)
+
 	// 3. sha1加密
 	h.Write([]byte(temp))
 	result = h.Sum(nil)
-	resStr = string(result)
+
+	resStr = (*string)(unsafe.Pointer(&result))
 
 	log.Println("res: ", resStr)
 
 	// 4. 与sign比对
-	if sign != resStr {
+	if sign != *resStr {
 		log.Println("sign is not equal with resStr!!")
 		r.Response.WriteStatusExit(http.StatusInternalServerError)
 		return
