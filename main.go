@@ -7,6 +7,7 @@ import (
 	"github.com/gogf/gf/net/ghttp"
 	"log"
 	"net/http"
+	"net/url"
 	"sort"
 )
 
@@ -45,7 +46,9 @@ func WxRegistry(r *ghttp.Request) {
 	h.Write([]byte(temp))
 	result = h.Sum(nil)
 
-	resStr = base64.StdEncoding.EncodeToString(result)
+	resStr = base64.URLEncoding.EncodeToString(result)
+
+	resStr = url.QueryEscape(resStr)
 
 	log.Println("result: ", result)
 	log.Println("res: ", resStr)
