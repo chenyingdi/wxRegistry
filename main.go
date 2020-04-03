@@ -17,6 +17,7 @@ func WxRegistry(r *ghttp.Request) {
 		temp      string
 		result    []byte
 		resStr    string
+		token     = "cyd19960424"
 		sign      = r.GetString("signature")
 		timeStamp = r.GetString("timestamp")
 		nonce     = r.GetString("nonce")
@@ -29,7 +30,7 @@ func WxRegistry(r *ghttp.Request) {
 	log.Println("nonce: ", nonce)
 	log.Println("echo: ", echoStr)
 
-	lst = append(lst, sign, timeStamp, nonce)
+	lst = append(lst, token, timeStamp, nonce)
 
 	// 1. 字典序排序
 	sort.Strings(lst)
