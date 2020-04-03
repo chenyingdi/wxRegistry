@@ -2,12 +2,12 @@ package main
 
 import (
 	"crypto/sha1"
+	"encoding/base64"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"log"
 	"net/http"
 	"sort"
-	"unsafe"
 )
 
 // 微信注册校验
@@ -16,7 +16,7 @@ func WxRegistry(r *ghttp.Request) {
 		lst       []string
 		temp      string
 		result    []byte
-		resStr    *string
+		resStr    string
 		sign      = r.GetString("signature")
 		timeStamp = r.GetString("timestamp")
 		nonce     = r.GetString("nonce")
@@ -45,13 +45,13 @@ func WxRegistry(r *ghttp.Request) {
 	h.Write([]byte(temp))
 	result = h.Sum(nil)
 
-	resStr = (*string)(unsafe.Pointer(&result))
+	resStr = base64.StdEncoding.EncodeToString(result)
 
 	log.Println("result: ", result)
-	log.Println("res: ", *resStr)
+	log.Println("res: ", resStr)
 
 	// 4. 与sign比对
-	if sign != *resStr {
+	if sign != resStr {
 		log.Println("sign is not equal with resStr!!")
 		r.Response.WriteStatusExit(http.StatusInternalServerError)
 		return
