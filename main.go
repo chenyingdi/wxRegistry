@@ -47,6 +47,7 @@ func WxRegistry(r *ghttp.Request) {
 
 	resStr = (*string)(unsafe.Pointer(&result))
 
+	log.Println("result: ", result)
 	log.Println("res: ", *resStr)
 
 	// 4. 与sign比对
