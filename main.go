@@ -2,12 +2,11 @@ package main
 
 import (
 	"crypto/sha1"
-	"encoding/base64"
+	"fmt"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"log"
 	"net/http"
-	"net/url"
 	"sort"
 )
 
@@ -46,9 +45,7 @@ func WxRegistry(r *ghttp.Request) {
 	h.Write([]byte(temp))
 	result = h.Sum(nil)
 
-	resStr = base64.URLEncoding.EncodeToString(result)
-
-	resStr = url.QueryEscape(resStr)
+	resStr = fmt.Sprintf("%x", result)
 
 	log.Println("result: ", result)
 	log.Println("res: ", resStr)
